@@ -43,7 +43,7 @@ docker run --rm -d -h db -p 1000:3600 --env-file ./.env --network=devops-network
 # build the container
 docker build -t devops/app -f ./docker-config/app/Dockerfile .
 # build run the container in daemon mode
-docker run --rm -d -h app -p 8080:8080 --env-file ./.env --network=devops-network devops/app 
+docker run --rm -d -h app -p 9000:8080 --env-file ./.env --network=devops-network devops/app 
 ```
 
 #### 5. Open the get url http://localhost:8080/demo/all on browser

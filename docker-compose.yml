@@ -16,7 +16,7 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_INTERNAL_PORT: ${MYSQL_INTERNAL_PORT}
     ports: 
-      - "8080:8080"
+      - "9000:8080"
     networks:
       - mysql-compose-network
     depends_on:
