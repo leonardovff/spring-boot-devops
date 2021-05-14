@@ -1,3 +1,63 @@
+# Installation
+## with docker-compose 
+
+#### 1. Copy the env-example to .env and setting it
+```bash
+cp env-example .env
+```
+
+#### 2. Build and up the container with mysql
+```bash
+docker-compose up -d db
+```
+#### 3. Build and up the container with application
+```bash
+docker-compose up -d app
+```
+#### 4. Open the url http://localhost:8080 on browser
+
+## without docker-compose 
+
+
+#### 1. Copy the env-example to .env and setting it
+```bash
+cp env-example .env
+```
+
+#### 2. Create a shared local ethernet network
+```bash
+docker network create -d bridge my-bridge-network 
+```
+
+#### 3. Build and up the container with mysql
+```bash
+# build the container
+docker build -t devops/db ./docker-config/db
+# build run the container in daemon mode
+docker run --rm -d -p 1000:3600 --env-file ./.env --network=devops-network devops/db
+```
+
+#### 4. Build and up the container with the application
+```bash
+# build the container
+docker build -t devops/app -f ./docker-config/app/Dockerfile .
+# build run the container in daemon mode
+docker run --rm -d -p 8080:3600 --env-file ./.env --network=devops-network devops/app 
+```
+
+
+## to local development
+
+#### 1. Install dependecies
+```bash
+mvn install
+```
+#### 2. Run the application
+```bash
+mvn spring-boot:run
+```
+
+---------------
 # Read Me First
 The following was discovered as part of building this project:
 
@@ -20,18 +80,3 @@ The following guides illustrate how to use some features concretely:
 * [Serving Web Content with Spring MVC](https://spring.io/guides/gs/serving-web-content/)
 * [Building REST services with Spring](https://spring.io/guides/tutorials/bookmarks/)
 
-
-
-### Installation
-## 1. Download and up the container with mysql
-```bash
-docker-compose up -d
-```
-## 2. Install depencies
-```bash
-mvn install
-```
-## 3. Run the application
-```bash
-mvn spring-boot:run
-```
