@@ -1,17 +1,39 @@
 version: '3'
 
+networks: 
+  mysql-compose-network:
+    driver: bridge
+
 services:
-  mysqlsrv:
-    image: mysql:5.7
+  app:
+    build:
+      context: ./
+      dockerfile: ./docker-config/app/Dockerfile
     environment:
-      MYSQL_ROOT_PASSWORD: "MySql2019!"
-      MYSQL_DATABASE: "testedb"
-    ports:
-      - "3306:3306"
+      MYSQL_HOST: db
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_INTERNAL_PORT: ${MYSQL_INTERNAL_PORT}
+    ports: 
+      - "8080:8080"
     networks:
       - mysql-compose-network
-    volumes:
-      - ./docker/mysql/scripts:/docker-entrypoint-initdb.d
+    depends_on:
+      - "db"
+  db:
+    build: ./docker-config/db/
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "${MYSQL_EXTERNAL_PORT}:${MYSQL_INTERNAL_PORT}"
+    networks:
+      - mysql-compose-network
+    # volumes:
+      # - ./docker/mysql/scripts:/docker-entrypoint-initdb.d
       # - ./mysql_data:/var/lib/mysql
 
   adminer:
@@ -20,7 +42,3 @@ services:
       - 8081:8080
     networks:
       - mysql-compose-network
-
-networks: 
-  mysql-compose-network:
-    driver: bridge
