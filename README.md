@@ -14,7 +14,8 @@ docker-compose up -d db
 ```bash
 docker-compose up -d app
 ```
-#### 4. Open the url http://localhost:8080 on browser
+#### 4. Open the get url http://localhost:8080/demo/all on browser
+#### 4. Or send a post to url http://localhost:8080/demo/add on client http
 
 ## without docker-compose 
 
@@ -34,7 +35,7 @@ docker network create -d bridge my-bridge-network
 # build the container
 docker build -t devops/db ./docker-config/db
 # build run the container in daemon mode
-docker run --rm -d -p 1000:3600 --env-file ./.env --network=devops-network devops/db
+docker run --rm -d -h db -p 1000:3600 --env-file ./.env --network=devops-network devops/db
 ```
 
 #### 4. Build and up the container with the application
@@ -42,9 +43,11 @@ docker run --rm -d -p 1000:3600 --env-file ./.env --network=devops-network devop
 # build the container
 docker build -t devops/app -f ./docker-config/app/Dockerfile .
 # build run the container in daemon mode
-docker run --rm -d -p 8080:3600 --env-file ./.env --network=devops-network devops/app 
+docker run --rm -d -h app -p 8080:8080 --env-file ./.env --network=devops-network devops/app 
 ```
 
+#### 5. Open the get url http://localhost:8080/demo/all on browser
+#### 6. Or send a post to url http://localhost:8080/demo/add on client http
 
 ## to local development
 
