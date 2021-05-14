@@ -1,0 +1,10 @@
+.mvn
+docker-config
+target
+.dockerignore
+.env
+.gitignore
+docker-compose.yml
+env-example
+mvnw.cmd
+README.md
