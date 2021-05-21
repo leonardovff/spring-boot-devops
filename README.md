@@ -1,9 +1,16 @@
 # Installation
 ## with docker-compose 
 
-#### 1. Copy the env-example to .env and setting it
+#### 1. Enable docker swarm
+```bash
+docker swarm init
+```
+
+#### 1. Copy the env-example to .env and setting it 
+#### and the copy the dbpassword to .dbpassword
 ```bash
 cp env-example .env
+cp dbpassword .dbpassword
 ```
 
 #### 2. Build and up the container with mysql
@@ -15,7 +22,7 @@ docker-compose up -d db
 docker-compose up -d app
 ```
 #### 4. Open the get url http://localhost:8080/demo/all on browser
-#### 4. Or send a post to url http://localhost:8080/demo/add on client http
+#### 5. Or send a post to url http://localhost:8080/demo/add on client http
 
 ## without docker-compose 
 

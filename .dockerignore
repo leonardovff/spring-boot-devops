@@ -3,8 +3,10 @@ docker-config
 target
 .dockerignore
 .env
+.dbpassword
 .gitignore
 docker-compose.yml
 env-example
+dbpassword
 mvnw.cmd
 README.md

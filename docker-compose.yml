@@ -6,6 +6,7 @@ networks:
 
 secrets:    
   dbpassword:
+    # external: true // only for swarm services
     file: .dbpassword
 
 services:
