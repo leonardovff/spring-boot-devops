@@ -1,11 +1,17 @@
-version: '3'
+version: '3.3'
 
 networks: 
   mysql-compose-network:
     driver: bridge
 
+secrets:    
+  dbpassword:
+    file: .dbpassword
+
 services:
   app:
+    # entrypoint: cat /run/secrets/dbpassword
+    # command: 
     build:
       context: ./
       dockerfile: ./docker-config/app/Dockerfile
@@ -13,7 +19,7 @@ services:
       MYSQL_HOST: db
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      # MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_INTERNAL_PORT: ${MYSQL_INTERNAL_PORT}
     ports: 
       - "9000:8080"
@@ -21,6 +27,9 @@ services:
       - mysql-compose-network
     depends_on:
       - "db"
+    secrets:
+      - dbpassword
+ 
   db:
     build: ./docker-config/db/
     environment:
@@ -32,6 +41,8 @@ services:
       - "${MYSQL_EXTERNAL_PORT}:${MYSQL_INTERNAL_PORT}"
     networks:
       - mysql-compose-network
+    # ports: 
+    #   - "3306:3306"
     # volumes:
       # - ./docker/mysql/scripts:/docker-entrypoint-initdb.d
       # - ./mysql_data:/var/lib/mysql
