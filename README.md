@@ -6,23 +6,28 @@
 docker swarm init
 ```
 
-#### 1. Copy the env-example to .env and setting it 
+#### 2. Copy the env-example to .env and setting it 
 #### and the copy the dbpassword to .dbpassword
 ```bash
 cp env-example .env
 cp dbpassword .dbpassword
 ```
 
-#### 2. Build and up the container with mysql
+#### 3. Build and up the container with mysql
 ```bash
 docker-compose up -d db
 ```
-#### 3. Build and up the container with application
+#### 4. Build and up the containers with the application
 ```bash
-docker-compose up -d app
+docker-compose up -d app1 app2 app3
 ```
-#### 4. Open the get url http://localhost:8080/demo/all on browser
-#### 5. Or send a post to url http://localhost:8080/demo/add on client http
+
+#### 5. Build and up the container with proxy
+```bash
+docker-compose up -d proxy
+```
+#### 6. Open the get url http://localhost:8080/demo/all on browser
+#### 7. Or send a post to url http://localhost:8080/demo/add on client http
 
 ## without docker-compose 
 

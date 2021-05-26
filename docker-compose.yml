@@ -10,9 +10,39 @@ secrets:
     file: .dbpassword
 
 services:
-  app:
-    # entrypoint: cat /run/secrets/dbpassword
-    # command: 
+  # app:
+  #   # entrypoint: cat /run/secrets/dbpassword
+  #   # command: 
+  #   build:
+  #     context: ./
+  #     dockerfile: ./docker-config/app/Dockerfile
+  #   environment:
+  #     MYSQL_HOST: db
+  #     MYSQL_DATABASE: ${MYSQL_DATABASE}
+  #     MYSQL_USER: ${MYSQL_USER}
+  #     # MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+  #     MYSQL_INTERNAL_PORT: ${MYSQL_INTERNAL_PORT}
+  #   ports: 
+  #     - "9000:8080"
+  #   networks:
+  #     - mysql-compose-network
+  #   depends_on:
+  #     - "db"
+  #   secrets:
+  #    - dbpassword
+
+  proxy:
+    build: ./docker-config/proxy
+    ports:
+      - "80:81"
+    networks:
+      - mysql-compose-network
+    depends_on:
+      - "app1"
+      - "app2"
+      - "app3"
+
+  app1: 
     build:
       context: ./
       dockerfile: ./docker-config/app/Dockerfile
@@ -20,17 +50,44 @@ services:
       MYSQL_HOST: db
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
-      # MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_INTERNAL_PORT: ${MYSQL_INTERNAL_PORT}
-    ports: 
-      - "9000:8080"
     networks:
       - mysql-compose-network
     depends_on:
       - "db"
     secrets:
       - dbpassword
- 
+  app2: 
+    build:
+      context: ./
+      dockerfile: ./docker-config/app/Dockerfile
+    environment:
+      MYSQL_HOST: db
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_INTERNAL_PORT: ${MYSQL_INTERNAL_PORT}
+    networks:
+      - mysql-compose-network
+    depends_on:
+      - "db"
+    secrets:
+      - dbpassword
+  app3: 
+    build:
+      context: ./
+      dockerfile: ./docker-config/app/Dockerfile
+    environment:
+      MYSQL_HOST: db
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_INTERNAL_PORT: ${MYSQL_INTERNAL_PORT}
+    networks:
+      - mysql-compose-network
+    depends_on:
+      - "db"
+    secrets:
+      - dbpassword
+
   db:
     build: ./docker-config/db/
     environment:
