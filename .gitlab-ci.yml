@@ -23,8 +23,10 @@ stages:
 docker-build:
   stage: build
   script:
-  - docker build -t devops/app -f ./docker-config/app/Dockerfile .
-
+  - echo $CI_REGISTRY
+  - docker build -t devops-app -f ./docker-config/app/Dockerfile .
+  - docker login -u $CI_JOB_USER -p $CI_JOB_TOKEN $CI_REGISTRY
+  - docker push $CI_REGISTRY/devops-app
 # k8s-deploy:
 #   image: google/cloud-sdk
 #   stage: deploy
