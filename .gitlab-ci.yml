@@ -23,7 +23,7 @@ stages:
 docker-build:
   stage: build
   before_script: 
-  - docker login -u $CI_JOB_USER -p $CI_JOB_TOKEN $CI_REGISTRY/leonardovff
+  - docker login $CI_REGISTRY -u $DOCKER_USER -p $DOCKER_PASSWORD 
   script:
   - echo $CI_REGISTRY
   # - docker build -t devops-app -f ./docker-config/app/Dockerfile .
