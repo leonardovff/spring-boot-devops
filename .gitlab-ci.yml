@@ -25,7 +25,7 @@ test:
   only: 
     - merge_requests
   script:
-    - mvn verify
+    - mvn test
   artifacts:
     when: always
     reports:
