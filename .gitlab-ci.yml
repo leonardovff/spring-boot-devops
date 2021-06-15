@@ -25,7 +25,7 @@ docker-build:
   script:
   - echo $CI_REGISTRY
   - docker build -t devops-app -f ./docker-config/app/Dockerfile .
-  - docker login -u $CI_JOB_USER -p $CI_JOB_TOKEN $CI_REGISTRY
+  - docker login -u $CI_JOB_USER -p $CI_JOB_TOKEN $CI_REGISTRY/leonardovff
   - docker push $CI_REGISTRY/devops-app
 # k8s-deploy:
 #   image: google/cloud-sdk
