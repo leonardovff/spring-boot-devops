@@ -1,4 +1,4 @@
-image: docker:latest
+3333333333333333image: docker:latest
 services:
   - docker:dind
 
@@ -7,8 +7,8 @@ services:
 #   SPRING_PROFILES_ACTIVE: gitlab-ci
 
 stages:
+  - test
   - build
-  # - test
   # - review
   # - deploy
 
@@ -19,7 +19,13 @@ stages:
 #   artifacts:
 #     paths:
 #       - target/*.jar
-
+test: 
+  image: maven:3.6.0-jdk-11-slim
+  stage: test
+  only: 
+    - merge_requests
+  script: 
+    - mvn test
 docker-build:
   stage: build
   only: 
