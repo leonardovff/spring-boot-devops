@@ -29,9 +29,11 @@ test:
   artifacts:
     when: always
     reports:
-      junit:
+      paths:
         - target/surefire-reports/TEST-*.xml
         - target/failsafe-reports/TEST-*.xml
+        - target/site/jacoco/jacoco.xml
+      cobertura: target/site/cobertura.xml
 docker-build:
   stage: build
   only: 
