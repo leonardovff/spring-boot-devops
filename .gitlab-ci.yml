@@ -22,13 +22,16 @@ stages:
 
 docker-build:
   stage: build
+  only: 
+    - main
+    - merge_requests
   variables: 
     CONTAINER_NAME: $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME
   before_script: 
-  - docker login $CI_REGISTRY -u $DOCKER_USER -p $DOCKER_PASSWORD 
+    - docker login $CI_REGISTRY -u $DOCKER_USER -p $DOCKER_PASSWORD 
   script:
-  - docker build -t $CONTAINER_NAME -f ./docker-config/app/Dockerfile .
-  - docker push $CONTAINER_NAME
+    - docker build -t $CONTAINER_NAME -f ./docker-config/app/Dockerfile .
+    - docker push $CONTAINER_NAME
   
 # k8s-deploy:
 #   image: google/cloud-sdk
