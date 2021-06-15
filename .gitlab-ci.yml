@@ -1,4 +1,4 @@
-3333333333333333image: docker:latest
+image: docker:latest
 services:
   - docker:dind
 
