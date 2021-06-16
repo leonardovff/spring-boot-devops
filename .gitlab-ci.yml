@@ -45,7 +45,6 @@ coverage:
     # convert report from jacoco to cobertura, using relative project path
     - python /opt/cover2cover.py target/site/jacoco/jacoco.xml $CI_PROJECT_DIR/src/main/java/ > target/site/cobertura.xml
     - cat target/site/cobertura.xml
-  needs: ["test"]
   dependencies:
     - test
   artifacts:
