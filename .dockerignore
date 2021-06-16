@@ -1,5 +1,4 @@
 .mvn
-docker-config
 target
 .dockerignore
 .env
