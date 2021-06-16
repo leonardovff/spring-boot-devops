@@ -27,6 +27,9 @@ test:
   script:
     - mvn test
   artifacts:
+    paths:
+
+  artifacts:
     when: always
     reports:
       paths:
