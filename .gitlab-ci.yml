@@ -33,7 +33,7 @@ test:
           }
           END {
             print covered, "/", instructions, "instructions covered";
-            printf "%.2f%% covered\n", covered / instructions * 100
+            printf "%.%% covered\n", covered / instructions * 100
           }' target/site/jacoco/jacoco.csv
   artifacts: 
     paths: 
