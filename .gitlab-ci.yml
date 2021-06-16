@@ -47,7 +47,7 @@ coverage:
     - cat target/site/cobertura.xml
   needs: ["test"]
   dependencies:
-    - test-jdk11
+    - test
   artifacts:
     reports:
       cobertura: target/site/cobertura.xml
