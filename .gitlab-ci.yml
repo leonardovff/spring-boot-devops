@@ -28,8 +28,8 @@ test:
   script:
     - mvn test
   artifacts: 
-    reports:
-      cobertura: target/site/cobertura.xml
+    # reports:
+    #   cobertura: target/site/cobertura.xml
     paths:
     - target/surefire-reports/TEST-*.xml
     - target/failsafe-reports/TEST-*.xml
