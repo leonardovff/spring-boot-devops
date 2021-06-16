@@ -34,10 +34,10 @@ test:
           END {
             print covered, "/", instructions, "instructions covered";
             printf "%.2f%% covered\n", covered / instructions * 100
-          }' "$1"
+          }' "$1" > target/site/jacoco/jacoco2.xml
   artifacts: 
     paths:
-    - target/site/jacoco/jacoco.xml
+    - target/site/jacoco/jacoco2.xml
     reports:
       junit:
         - target/surefire-reports/TEST-*.xml
