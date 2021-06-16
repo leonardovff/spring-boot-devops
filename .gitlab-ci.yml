@@ -26,8 +26,6 @@ test:
     - merge_requests
   script:
     - mvn test
-  artifacts:
-    paths:
 
   artifacts:
     when: always
