@@ -1,5 +1,5 @@
 [![pipeline status](https://gitlab.com/leonardovff/sprint-boot-devops/badges/main/pipeline.svg)](https://gitlab.com/leonardovff/sprint-boot-devops/-/commits/main)
-![coverage](https://gitlab.com/leonardovff/sprint-boot-devops/badges/main/coverage.svg)
+[![coverage](https://gitlab.com/leonardovff/sprint-boot-devops/badges/main/coverage.svg)]((https://gitlab.com/leonardovff/sprint-boot-devops/-/commits/main))
 
 # Installation
 ## with docker-compose 
