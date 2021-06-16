@@ -31,9 +31,11 @@ test:
     # reports:
     #   cobertura: target/site/cobertura.xml
     paths:
-    - target/surefire-reports/TEST-*.xml
-    - target/failsafe-reports/TEST-*.xml
     - target/site/jacoco/jacoco.xml
+    reports:
+      junit:
+        - target/surefire-reports/TEST-*.xml
+        - target/failsafe-reports/TEST-*.xml
 
 coverage:
   # Must be in a stage later than test-jdk11's stage.
