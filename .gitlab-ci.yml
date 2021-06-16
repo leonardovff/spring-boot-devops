@@ -26,15 +26,10 @@ test:
     - merge_requests
   script:
     - mvn test
-
-  artifacts:
-    when: always
+  artifacts: 
     reports:
-      paths:
-        - target/surefire-reports/TEST-*.xml
-        - target/failsafe-reports/TEST-*.xml
-        - target/site/jacoco/jacoco.xml
-      cobertura: target/site/cobertura.xml
+        cobertura: target/site/cobertura.xml
+        
 docker-build:
   stage: build
   only: 
