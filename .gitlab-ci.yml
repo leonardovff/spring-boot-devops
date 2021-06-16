@@ -36,13 +36,13 @@ test:
             printf "%.2f%% covered\n", covered / instructions * 100
           }' "$1" > target/site/jacoco/jacoco2.xml
   artifacts: 
-    paths:
-    - target/site/jacoco/jacoco2.xml
+    # paths:
+    # - target/site/jacoco/jacoco2.xml
     reports:
       junit:
         - target/surefire-reports/TEST-*.xml
         - target/failsafe-reports/TEST-*.xml
-      cobertura: target/site/cobertura.xml
+      cobertura: target/site/jacoco/jacoco2.xml
       # cobertura: target/site/jacoco/jacoco.xml
 # coverage:
 #   # Must be in a stage later than test-jdk11's stage.
