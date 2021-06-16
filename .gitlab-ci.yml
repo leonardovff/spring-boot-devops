@@ -28,7 +28,11 @@ test:
     - mvn test
   artifacts: 
     reports:
-        cobertura: target/site/cobertura.xml
+      cobertura: target/site/cobertura.xml
+    paths:
+    - target/surefire-reports/TEST-*.xml
+    - target/failsafe-reports/TEST-*.xml
+    - target/site/jacoco/jacoco.xml
         
 docker-build:
   stage: build
