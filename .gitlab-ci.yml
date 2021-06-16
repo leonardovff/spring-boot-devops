@@ -49,6 +49,7 @@ docker-build:
     - docker build -t $CONTAINER_NAME -f ./docker-config/app/Dockerfile .
     - docker push $CONTAINER_NAME
   
+  
 # k8s-deploy:
 #   image: google/cloud-sdk
 #   stage: deploy
