@@ -3,10 +3,10 @@
 #   SPRING_PROFILES_ACTIVE: gitlab-ci
 
 stages:
+  - production
   - test
   - build
   # - review
-  - production
 
 test: 
   image: maven:3.6.0-jdk-11-slim
@@ -52,7 +52,7 @@ docker-build:
     - docker build -t $CONTAINER_NAME -f ./docker-config/app/Dockerfile .
     - docker push $CONTAINER_NAME
 deploy:
-  stage: docker:lalest
+  stage: production
   only: 
     - main
   tags:
