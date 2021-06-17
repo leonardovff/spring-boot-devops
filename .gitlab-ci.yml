@@ -6,7 +6,7 @@ stages:
   - test
   - build
   # - review
-  # - deploy
+  - production
 
 test: 
   image: maven:3.6.0-jdk-11-slim
@@ -51,7 +51,14 @@ docker-build:
   script:
     - docker build -t $CONTAINER_NAME -f ./docker-config/app/Dockerfile .
     - docker push $CONTAINER_NAME
-  
+deploy:
+  stage: docker:lalest
+  only: 
+    - main
+  tags:
+    - imovel-ideal-vm1-shell
+  script: 
+    - ls
 # k8s-deploy:
 #   image: google/cloud-sdk
 #   stage: deploy
