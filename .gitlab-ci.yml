@@ -3,10 +3,10 @@
 #   SPRING_PROFILES_ACTIVE: gitlab-ci
 
 stages:
-  - production
   - test
   - build
   # - review
+  - production
 
 test: 
   image: maven:3.6.0-jdk-11-slim
@@ -34,7 +34,7 @@ test:
         - target/surefire-reports/TEST-*.xml
         - target/failsafe-reports/TEST-*.xml
 
-docker-build:
+app-build:
   image: docker:latest
   services:
     - docker:dind
@@ -51,6 +51,25 @@ docker-build:
   script:
     - docker build -t $CONTAINER_NAME -f ./docker-config/app/Dockerfile .
     - docker push $CONTAINER_NAME
+
+nginx-build:
+  image: docker:latest
+  services:
+    - docker:dind
+  stage: build
+  only: 
+    - main
+    - merge_requests
+  tags:
+    - docker-runner-imovel-ideal
+  variables: 
+    CONTAINER_NAME: $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME-nginx
+  before_script: 
+    - docker login $CI_REGISTRY -u $DOCKER_USER -p $DOCKER_PASSWORD 
+  script:
+    - docker build -t $CONTAINER_NAME ./docker-config/nginx
+    - docker push $CONTAINER_NAME
+
 deploy:
   stage: production
   only: 
