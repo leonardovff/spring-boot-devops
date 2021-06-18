@@ -87,6 +87,7 @@ deploy:
     - cd /var/www
     - docker-compose pull
     - docker-compose up --remove-orphans -d
+    - docker image prune
   after_script:
     - docker logout
     - rm -f -- /var/www/.dbpassword
