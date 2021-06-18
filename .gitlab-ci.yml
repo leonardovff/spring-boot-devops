@@ -72,6 +72,7 @@ loadbalance-build:
 
 deploy:
   stage: production
+  environment: live
   only: 
     - main
   tags:
@@ -80,9 +81,9 @@ deploy:
     - docker login $CI_REGISTRY -u $DOCKER_USER -p $DOCKER_PASSWORD
   script: 
     # TODO: remove and use from gitlab variabless
-    - cp -f env-example /var/www/.env
+    - cp -f $env /var/www/.env
     - cp -f docker-compose.production.yml /var/www/docker-compose.yml
-    - cp -f dbpassword /var/www/.dbpassword
+    - cp -f $dbpassword /var/www/.dbpassword
     - cd /var/www
     - docker-compose pull
     - docker-compose up --remove-orphans -d
