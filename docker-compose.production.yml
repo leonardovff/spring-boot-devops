@@ -16,8 +16,8 @@ secrets:
 
 services:
   proxy:
-    build: ./docker-config/proxy
-    # image: registry.gitlab.com/leonardovff/sprint-boot-devops/loadbalance:latest
+    # build: ./docker-config/proxy
+    image: registry.gitlab.com/leonardovff/sprint-boot-devops/loadbalance:latest
     ports:
       - "80:81"
     networks:
@@ -57,7 +57,7 @@ services:
       - dbpassword
 
   db:
-    image: mysql:5.7
+    image: registry.gitlab.com/leonardovff/sprint-boot-devops/mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
