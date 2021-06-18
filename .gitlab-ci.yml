@@ -63,7 +63,7 @@ loadbalance-build:
   tags:
     - docker-runner-imovel-ideal
   variables: 
-    CONTAINER_NAME: $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME-loadbalance
+    CONTAINER_NAME: $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/loadbalance
   before_script: 
     - docker login $CI_REGISTRY -u $DOCKER_USER -p $DOCKER_PASSWORD 
   script:
