@@ -77,12 +77,10 @@ deploy:
   tags:
     - imovel-ideal-vm1-shell
   script: 
-    - pwd
-    - whoami
     - yes | cp docker-compose.production.yml /var/www/docker-compose.yml
-    # TODO: remove and use from gitlab variables
+    - # TODO: remove and use from gitlab variables
     - yes | cp env-example /var/www/.env
-    # TODO: remove and use from gitlab variables
+    - # TODO: remove and use from gitlab variables
     - yes | cp dbpassword /var/www/dbpassword
     - cd /var/www
     - docker-compose pull
