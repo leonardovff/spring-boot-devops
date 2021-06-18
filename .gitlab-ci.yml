@@ -58,7 +58,8 @@ deploy:
   tags:
     - imovel-ideal-vm1-shell
   script: 
-    - pwd
+    - cd /home/
+    - ls
 # k8s-deploy:
 #   image: google/cloud-sdk
 #   stage: deploy
