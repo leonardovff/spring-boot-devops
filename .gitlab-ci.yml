@@ -89,6 +89,7 @@ deploy:
     - docker-compose up --remove-orphans -d
   after_script:
     - docker logout
+    - rm -f -- /var/www/.dbpassword
     
 # k8s-deploy:
 #   image: google/cloud-sdk

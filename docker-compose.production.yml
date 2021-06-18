@@ -16,8 +16,8 @@ secrets:
 
 services:
   proxy:
-    # build: ./docker-config/proxy
     image: registry.gitlab.com/leonardovff/sprint-boot-devops/loadbalance:latest
+    restart: always
     ports:
       - "80:81"
     networks:
@@ -28,6 +28,7 @@ services:
 
   app1: 
     image: registry.gitlab.com/leonardovff/sprint-boot-devops/app:latest
+    restart: always
     environment:
       MYSQL_HOST: db
       MYSQL_DATABASE: ${MYSQL_DATABASE}
@@ -43,6 +44,7 @@ services:
 
   app2: 
     image: registry.gitlab.com/leonardovff/sprint-boot-devops/app:latest
+    restart: always
     environment:
       MYSQL_HOST: db
       MYSQL_DATABASE: ${MYSQL_DATABASE}
@@ -57,12 +59,15 @@ services:
       - dbpassword
 
   db:
-    image: registry.gitlab.com/leonardovff/sprint-boot-devops/mysql
+    image: registry.gitlab.com/leonardovff/sprint-boot-devops/mysql:latest
+    restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_PASSWORD_FILE: /run/secrets/dbpassword
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/dbpassword
+    secrets:
+      - dbpassword
     ports:
       - "${MYSQL_EXTERNAL_PORT}:${MYSQL_INTERNAL_PORT}"
     networks:

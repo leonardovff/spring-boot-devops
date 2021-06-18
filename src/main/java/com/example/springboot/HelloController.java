@@ -21,7 +21,7 @@ public class HelloController {
 	// public String index() {
 	// 	return "Greetings from Spring Boott!";
 	// }
-	@PostMapping(path="/") // Map ONLY POST Requests
+	@PostMapping(path="") // Map ONLY POST Requests
 	public @ResponseBody String addNewUser (@RequestParam String name
 		, @RequestParam String email) {
 	  // @ResponseBody means the returned String is the response, not a view name
@@ -34,7 +34,7 @@ public class HelloController {
 	  return "Saved";
 	}
   
-	@GetMapping(path="/")
+	@GetMapping(path="")
 	public @ResponseBody Iterable<User> getAllUsers() {
 	  // This returns a JSON or XML with the users
 	  return userRepository.findAll();
