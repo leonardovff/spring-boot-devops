@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping(path="/demo") 
+@RequestMapping(path="/users") 
 // @RestController
 public class HelloController {
 	@Autowired 
@@ -21,7 +21,7 @@ public class HelloController {
 	// public String index() {
 	// 	return "Greetings from Spring Boott!";
 	// }
-	@PostMapping(path="/add") // Map ONLY POST Requests
+	@PostMapping(path="/") // Map ONLY POST Requests
 	public @ResponseBody String addNewUser (@RequestParam String name
 		, @RequestParam String email) {
 	  // @ResponseBody means the returned String is the response, not a view name
@@ -34,7 +34,7 @@ public class HelloController {
 	  return "Saved";
 	}
   
-	@GetMapping(path="/all")
+	@GetMapping(path="/")
 	public @ResponseBody Iterable<User> getAllUsers() {
 	  // This returns a JSON or XML with the users
 	  return userRepository.findAll();
