@@ -29,11 +29,16 @@ services:
   app1: 
     image: registry.gitlab.com/leonardovff/sprint-boot-devops/app:latest
     restart: always
+    labels:
+      - "traefik.http.routers.app1.rule=Host(`whoami.docker.localhost`)"
+      # - "traefik.http.services.app1.loadBalancer.server.port=8080"
     environment:
       MYSQL_HOST: db
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_INTERNAL_PORT: ${MYSQL_INTERNAL_PORT}
+    # ports: 
+    #   - "9000:8080"
     networks:
       - imovel-ideal-db
       - imovel-ideal-proxy
