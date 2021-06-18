@@ -76,6 +76,8 @@ deploy:
     - main
   tags:
     - imovel-ideal-vm1-shell
+  before_script:
+    - docker login $CI_REGISTRY -u $DOCKER_USER -p $DOCKER_PASSWORD
   script: 
     - cp -f env-example /var/www/.env
     - cp -f docker-compose.production.yml /var/www/docker-compose.yml
@@ -83,6 +85,8 @@ deploy:
     - cd /var/www
     - docker-compose pull
     - docker-compose up --remove-orphans -d
+  after_script:
+    - docker logout
     # TODO: remove and use from gitlab variabless
     
 # k8s-deploy:
