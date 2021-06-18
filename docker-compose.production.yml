@@ -1,0 +1,72 @@
+version: '3.3'
+
+volumes:
+  imovel-ideal:
+
+networks: 
+  imovel-ideal-db:
+    driver: bridge
+  
+  imovel-ideal-proxy:
+    driver: bridge
+
+secrets:    
+  dbpassword:
+    file: .dbpassword
+
+services:
+  proxy:
+    build: ./docker-config/proxy
+    # image: registry.gitlab.com/leonardovff/sprint-boot-devops/loadbalance:latest
+    ports:
+      - "80:81"
+    networks:
+      - imovel-ideal-proxy
+    depends_on:
+      - "app1"
+      - "app2"
+
+  app1: 
+    image: registry.gitlab.com/leonardovff/sprint-boot-devops/app:latest
+    environment:
+      MYSQL_HOST: db
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_INTERNAL_PORT: ${MYSQL_INTERNAL_PORT}
+    networks:
+      - imovel-ideal-db
+      - imovel-ideal-proxy
+    depends_on:
+      - "db"
+    secrets:
+      - dbpassword
+
+  app2: 
+    image: registry.gitlab.com/leonardovff/sprint-boot-devops/app:latest
+    environment:
+      MYSQL_HOST: db
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_INTERNAL_PORT: ${MYSQL_INTERNAL_PORT}
+    networks:
+      - imovel-ideal-db
+      - imovel-ideal-proxy
+    depends_on:
+      - "db"
+    secrets:
+      - dbpassword
+
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "${MYSQL_EXTERNAL_PORT}:${MYSQL_INTERNAL_PORT}"
+    networks:
+      - imovel-ideal-db
+      - imovel-ideal-proxy
+    volumes:
+      - imovel-ideal:/var/lib/mysql
