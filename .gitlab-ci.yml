@@ -52,7 +52,7 @@ app-build:
     - docker build -t $CONTAINER_NAME -f ./docker-config/app/Dockerfile .
     - docker push $CONTAINER_NAME
 
-nginx-build:
+loadbalance-build:
   image: docker:latest
   services:
     - docker:dind
@@ -63,11 +63,11 @@ nginx-build:
   tags:
     - docker-runner-imovel-ideal
   variables: 
-    CONTAINER_NAME: $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME-nginx
+    CONTAINER_NAME: $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME-loadbalance
   before_script: 
     - docker login $CI_REGISTRY -u $DOCKER_USER -p $DOCKER_PASSWORD 
   script:
-    - docker build -t $CONTAINER_NAME ./docker-config/nginx
+    - docker build -t $CONTAINER_NAME ./docker-config/proxy
     - docker push $CONTAINER_NAME
 
 deploy:
