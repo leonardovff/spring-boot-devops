@@ -77,8 +77,8 @@ deploy:
   tags:
     - imovel-ideal-vm1-shell
   script: 
+    - yes | cp env-example /var/www/.envs
     - yes | cp docker-compose.production.yml /var/www/docker-compose.yml
-    - yes | cp env-example /var/www/.env
     - yes | cp dbpassword /var/www/dbpassword
     - cd /var/www
     - docker-compose pull
