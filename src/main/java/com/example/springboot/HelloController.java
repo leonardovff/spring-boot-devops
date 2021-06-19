@@ -40,10 +40,4 @@ public class HelloController {
 	  return userRepository.findAll();
 	}
 
-	@GetMapping(path="/nana")
-	public @ResponseBody Iterable<User> getAllUsers() {
-	  // This returns a JSON or XML with the users
-	  return "nana"
-	}
-
 }
