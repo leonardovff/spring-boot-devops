@@ -7,8 +7,12 @@ networks:
   imovel-ideal-db:
     driver: bridge
   
-  imovel-ideal-proxy:
+  imovel-ideal-internal-proxy:
     driver: bridge
+
+  proxy:
+    external:
+      name: "imovel-ideal_external-proxy"
 
 secrets:    
   dbpassword:
@@ -21,43 +25,27 @@ services:
     ports:
       - "80:81"
     networks:
-      - imovel-ideal-proxy
+      - imovel-ideal-internal-proxy
     depends_on:
-      - "app1"
-      - "app2"
+      - "app"
 
-  app1: 
+  app: 
     image: registry.gitlab.com/leonardovff/sprint-boot-devops/app:latest
     restart: always
     labels:
-      - "traefik.http.routers.app1.rule=Host(`whoami.docker.localhost`)"
-      # - "traefik.http.services.app1.loadBalancer.server.port=8080"
+      - "traefik.http.routers.app.rule=Host(`app.docker.localhost`)"
+      - "traefik.enable=true"
     environment:
       MYSQL_HOST: db
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_INTERNAL_PORT: ${MYSQL_INTERNAL_PORT}
     # ports: 
-    #   - "9000:8080"
+    #   - "8080:8080"
     networks:
       - imovel-ideal-db
-      - imovel-ideal-proxy
-    depends_on:
-      - "db"
-    secrets:
-      - dbpassword
-
-  app2: 
-    image: registry.gitlab.com/leonardovff/sprint-boot-devops/app:latest
-    restart: always
-    environment:
-      MYSQL_HOST: db
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_INTERNAL_PORT: ${MYSQL_INTERNAL_PORT}
-    networks:
-      - imovel-ideal-db
-      - imovel-ideal-proxy
+      - imovel-ideal-internal-proxy
+      - proxy
     depends_on:
       - "db"
     secrets:
@@ -77,6 +65,6 @@ services:
       - "${MYSQL_EXTERNAL_PORT}:${MYSQL_INTERNAL_PORT}"
     networks:
       - imovel-ideal-db
-      - imovel-ideal-proxy
+      - imovel-ideal-internal-proxy
     volumes:
       - imovel-ideal:/var/lib/mysql
