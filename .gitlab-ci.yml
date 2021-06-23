@@ -55,7 +55,9 @@ app-build:
 
 deploy:
   stage: production
-  environment: live
+  environment: 
+    name: live
+    url: http://imovelideal.lvff.me
   only: 
     - main
   tags:
