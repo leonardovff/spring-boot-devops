@@ -61,14 +61,14 @@ deploy:
   tags:
     - imovel-ideal-vm1-shell
   variables: 
-    PATH: /var/www/production
+    WORKDIR_PATH: /var/www/production
   before_script:
     - docker login $CI_REGISTRY -u $DOCKER_USER -p $DOCKER_PASSWORD
   script: 
-    - cp -f $env $PATH/.env
-    - cp -f docker-compose.production.yml $PATH/docker-compose.yml
-    - cp -f $dbpassword $PATH/.dbpassword
-    - cd $PATH
+    - cp -f $env $WORKDIR_PATH/.env
+    - cp -f docker-compose.production.yml $WORKDIR_PATH/docker-compose.yml
+    - cp -f $dbpassword $WORKDIR_PATH/.dbpassword
+    - cd $WORKDIR_PATH
     - docker-compose pull
     - docker-compose up --remove-orphans -d
     - docker image prune -f
@@ -84,15 +84,11 @@ deploy-traefik:
   tags:
     - imovel-ideal-vm1-shell
   variables: 
-    PATH: /var/www/traefik
-  before_script:
-    - echo 'outra coisa'
+    WORKDIR_PATH: /var/www/traefik
   script:
-    - echo 'alguma coisa' 
-    # - echo "passou por aqui"
-    # - echo "COMPOSE_PROJECT_NAME=imovel-ideal" > $PATH/.env
-    # - cp -f traefik-compose.yml $PATH/docker-compose.yml
-    # - cd $PATH
-    # - docker-compose pull
-    # - docker-compose up --remove-orphans -d
-    # - docker image prune -f
+    - echo "COMPOSE_PROJECT_NAME=imovel-ideal" > $WORKDIR_PATH/.env
+    - cp -f traefik-compose.yml $WORKDIR_PATH/docker-compose.yml
+    - cd $WORKDIR_PATH
+    - docker-compose pull
+    - docker-compose up --remove-orphans -d
+    - docker image prune -f
