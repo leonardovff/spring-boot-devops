@@ -80,6 +80,7 @@ deploy-traefik:
   stage: production-proxy
   # only: 
   #   - main
+  when: manual
   tags:
     - imovel-ideal-vm1-shell
   variables: 
