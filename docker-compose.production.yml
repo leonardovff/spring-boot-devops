@@ -19,6 +19,8 @@ services:
   app: 
     image: registry.gitlab.com/leonardovff/sprint-boot-devops/app:latest
     restart: always
+    deploy:
+      replicas: 1
     labels:
       - "traefik.http.routers.app.rule=Host(`imovelideal.lvff.me`)"
       - "traefik.enable=true"

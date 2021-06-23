@@ -72,7 +72,7 @@ deploy:
     - cp -f $dbpassword $WORKDIR_PATH/.dbpassword
     - cd $WORKDIR_PATH
     - docker-compose pull
-    - docker-compose up --scale app=2 --remove-orphans -d
+    - docker-compose --compatibility up --remove-orphans -d
     - docker image prune -f
   after_script:
     - docker logout
