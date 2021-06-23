@@ -6,6 +6,7 @@ stages:
   - test
   - build
   - production
+  - production-proxy
   # - review
 
 test: 
@@ -52,24 +53,6 @@ app-build:
     - docker build -t $CONTAINER_NAME -f ./docker-config/app/Dockerfile .
     - docker push $CONTAINER_NAME
 
-loadbalance-build:
-  image: docker:latest
-  services:
-    - docker:dind
-  stage: build
-  only: 
-    - main
-    - merge_requests
-  tags:
-    - docker-runner-imovel-ideal
-  variables: 
-    CONTAINER_NAME: $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/loadbalance
-  before_script: 
-    - docker login $CI_REGISTRY -u $DOCKER_USER -p $DOCKER_PASSWORD 
-  script:
-    - docker build -t $CONTAINER_NAME ./docker-config/proxy
-    - docker push $CONTAINER_NAME
-
 deploy:
   stage: production
   environment: live
@@ -77,31 +60,36 @@ deploy:
     - main
   tags:
     - imovel-ideal-vm1-shell
+  variables: 
+    PATH: /var/www/production
   before_script:
     - docker login $CI_REGISTRY -u $DOCKER_USER -p $DOCKER_PASSWORD
   script: 
-    # TODO: remove and use from gitlab variabless
-    - cp -f $env /var/www/.env
-    - cp -f docker-compose.production.yml /var/www/docker-compose.yml
-    - cp -f $dbpassword /var/www/.dbpassword
-    - cd /var/www
+    - cp -f $env $PATH/.env
+    - cp -f docker-compose.production.yml $PATH/docker-compose.yml
+    - cp -f $dbpassword $PATH/.dbpassword
+    - cd $PATH
     - docker-compose pull
     - docker-compose up --remove-orphans -d
     - docker image prune -f
   after_script:
     - docker logout
     - rm -f -- /var/www/.dbpassword
-    
-# k8s-deploy:
-#   image: google/cloud-sdk
-#   stage: deploy
-#   script:
-#   - echo "$GOOGLE_KEY" > key.json
-#   - gcloud auth activate-service-account --key-file key.json
-#   - gcloud config set compute/zone europe-west1-c
-#   - gcloud config set project actuator-sample
-#   - gcloud config set container/use_client_certificate True
-#   - gcloud container clusters get-credentials actuator-sample
-#   - kubectl delete secret registry.gitlab.com
-#   - kubectl create secret docker-registry registry.gitlab.com --docker-server=https://registry.gitlab.com --docker-username=marcolenzo --docker-password=$REGISTRY_PASSWD --docker-email=lenzo.marco@gmail.com
-#   - kubectl apply -f deployment.yml
+
+deploy-traefik:
+  stage: production-proxy
+  # only: 
+  #   - main
+  tags:
+    - imovel-ideal-vm1-shell
+  variables: 
+    PATH: /var/www/traefik
+  before_script:
+    - docker login $CI_REGISTRY -u $DOCKER_USER -p $DOCKER_PASSWORD
+  script: 
+    - echo "COMPOSE_PROJECT_NAME=imovel-ideal" > $PATH/.env
+    - cp -f traefik-compose.yml $PATH/docker-compose.yml
+    - cd $PATH
+    - docker-compose pull
+    - docker-compose up --remove-orphans -d
+    - docker image prune -f

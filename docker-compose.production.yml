@@ -6,9 +6,6 @@ volumes:
 networks: 
   imovel-ideal-db:
     driver: bridge
-  
-  imovel-ideal-internal-proxy:
-    driver: bridge
 
   proxy:
     external:
@@ -19,16 +16,6 @@ secrets:
     file: .dbpassword
 
 services:
-  proxy:
-    image: registry.gitlab.com/leonardovff/sprint-boot-devops/loadbalance:latest
-    restart: always
-    ports:
-      - "80:81"
-    networks:
-      - imovel-ideal-internal-proxy
-    depends_on:
-      - "app"
-
   app: 
     image: registry.gitlab.com/leonardovff/sprint-boot-devops/app:latest
     restart: always
@@ -44,7 +31,6 @@ services:
     #   - "8080:8080"
     networks:
       - imovel-ideal-db
-      - imovel-ideal-internal-proxy
       - proxy
     depends_on:
       - "db"
@@ -65,6 +51,5 @@ services:
       - "${MYSQL_EXTERNAL_PORT}:${MYSQL_INTERNAL_PORT}"
     networks:
       - imovel-ideal-db
-      - imovel-ideal-internal-proxy
     volumes:
       - imovel-ideal:/var/lib/mysql
