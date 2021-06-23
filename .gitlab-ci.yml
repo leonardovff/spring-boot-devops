@@ -78,18 +78,16 @@ deploy:
 
 deploy-traefik:
   stage: production-proxy
-  # only: 
-  #   - main
   when: manual
   tags:
     - imovel-ideal-vm1-shell
-  variables: 
-    PATH: /var/www/traefik
-  script: 
-    - echo "passou por aqui"
-    - echo "COMPOSE_PROJECT_NAME=imovel-ideal" > $PATH/.env
-    - cp -f traefik-compose.yml $PATH/docker-compose.yml
-    - cd $PATH
-    - docker-compose pull
-    - docker-compose up --remove-orphans -d
-    - docker image prune -f
+  # variables: 
+    # PATH: /var/www/traefik
+  # script: 
+    # - echo "passou por aqui"
+    # - echo "COMPOSE_PROJECT_NAME=imovel-ideal" > $PATH/.env
+    # - cp -f traefik-compose.yml $PATH/docker-compose.yml
+    # - cd $PATH
+    # - docker-compose pull
+    # - docker-compose up --remove-orphans -d
+    # - docker image prune -f
