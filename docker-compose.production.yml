@@ -20,7 +20,7 @@ services:
     image: registry.gitlab.com/leonardovff/sprint-boot-devops/app:latest
     restart: always
     labels:
-      - "traefik.http.routers.app.rule=Host(`app.docker.localhost`)"
+      - "traefik.http.routers.app.rule=Host(`imovelideal.lvff.me`)"
       - "traefik.enable=true"
     environment:
       MYSQL_HOST: db

@@ -85,9 +85,8 @@ deploy-traefik:
     - imovel-ideal-vm1-shell
   variables: 
     PATH: /var/www/traefik
-  before_script:
-    - docker login $CI_REGISTRY -u $DOCKER_USER -p $DOCKER_PASSWORD
   script: 
+    - echo "passou por aqui"
     - echo "COMPOSE_PROJECT_NAME=imovel-ideal" > $PATH/.env
     - cp -f traefik-compose.yml $PATH/docker-compose.yml
     - cd $PATH
