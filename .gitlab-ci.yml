@@ -72,7 +72,7 @@ deploy:
     - cp -f $dbpassword $WORKDIR_PATH/.dbpassword
     - cd $WORKDIR_PATH
     - docker-compose pull
-    - docker-compose up --remove-orphans -d
+    - docker-compose up --scale app=2 --remove-orphans -d
     - docker image prune -f
   after_script:
     - docker logout
@@ -80,8 +80,9 @@ deploy:
 
 deploy-traefik:
   stage: production-proxy
-  # only: 
-  #   - main
+  only: 
+    - main
+  needs: []
   when: manual
   tags:
     - imovel-ideal-vm1-shell
