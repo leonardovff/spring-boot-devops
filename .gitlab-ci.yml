@@ -2,8 +2,8 @@
 #   SPRING_PROFILES_ACTIVE: gitlab-ci
 
 stages:
-  - review
   - build
+  - review
   - test
   - production
   - production-proxy
@@ -72,7 +72,7 @@ review:
   tags:
     - imovel-ideal-vm1-shell
   variables: 
-    WORKDIR_PATH: /var/www/review/$CI_COMMIT_REF_NAME
+    WORKDIR_PATH: /var/www/review/$APP_IMAGE
   script: 
     - mkdir -p $WORKDIR_PATH
     - cp -f $env $WORKDIR_PATH/.env
