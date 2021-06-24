@@ -2,22 +2,24 @@
 #   SPRING_PROFILES_ACTIVE: gitlab-ci
 
 stages:
-  - build
   - review
+  - build
   - test
   - production
   - production-proxy
 default:
   before_script: 
     - |
+      APP_SLUG=
       if [ "$CI_COMMIT_REF_NAME" == "master" ]; then
         echo "setting APP_IMAGE=app:latest"
+        APP_SLUG="production"
         APP_IMAGE="app:latest"
       else
         echo "setting APP_IMAGE=app-review:BRANCH_NAME"
-        APP_IMAGE="app-review:"$CI_COMMIT_REF_NAME
+        APP_SLUG="${CI_COMMIT_REF_NAME/\//"-"}"
+        APP_IMAGE="app-review:"$APP_SLUG
       fi
-      APP_IMAGE="${APP_IMAGE/\//"-"}"
     - CONTAINER_NAME=$CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/$APP_IMAGE
     - docker login $CI_REGISTRY -u $DOCKER_USER -p $DOCKER_PASSWORD 
 
@@ -72,8 +74,8 @@ review:
   tags:
     - imovel-ideal-vm1-shell
   variables: 
-    WORKDIR_PATH: /var/www/review/$APP_IMAGE
-    APP_HOSTNAME: $APP_IMAGE.review.imovelideal.lvff.me
+    WORKDIR_PATH: /var/www/review/$APP_SLUG
+    APP_HOSTNAME: $APP_SLUG.review.imovelideal.lvff.me
   script: 
     - mkdir -p $WORKDIR_PATH
     - cp -f $env $WORKDIR_PATH/.env
@@ -86,7 +88,7 @@ review:
     - docker image prune -f
   after_script:
     - docker logout
-    - rm -f -- /var/www/.dbpassword
+    - rm -f -- $WORKDIR_PATH/.dbpassword
 
 deploy:
   stage: production
@@ -111,7 +113,7 @@ deploy:
     - docker image prune -f
   after_script:
     - docker logout
-    - rm -f -- /var/www/.dbpassword
+    - rm -f -- $WORKDIR_PATH/.dbpassword
 
 deploy-traefik:
   stage: production-proxy
