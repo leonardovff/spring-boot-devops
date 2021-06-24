@@ -66,13 +66,14 @@ review:
   stage: review
   environment: 
     name: review/$CI_COMMIT_REF_NAME
-    url: http://$CI_COMMIT_REF_NAME.review.imovelideal.lvff.me
+    url: http://$APP_IMAGE.review.imovelideal.lvff.me
   only: 
     - merge_requests
   tags:
     - imovel-ideal-vm1-shell
   variables: 
     WORKDIR_PATH: /var/www/review/$APP_IMAGE
+    APP_HOSTNAME: $APP_IMAGE.review.imovelideal.lvff.me
   script: 
     - mkdir -p $WORKDIR_PATH
     - cp -f $env $WORKDIR_PATH/.env
