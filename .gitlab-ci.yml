@@ -62,6 +62,7 @@ app-build:
   tags:
     - docker-runner-imovel-ideal
   script:
+    - echo $CONTAINER_NAME
     - docker build -t $CONTAINER_NAME -f ./docker-config/app/Dockerfile .
     - docker push $CONTAINER_NAME
 
