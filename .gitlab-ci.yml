@@ -31,6 +31,8 @@ test:
     - main
   tags:
     - docker-runner-imovel-ideal
+  before_script:
+    - echo "init test"
   script:
     - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent test jacoco:report
     - awk -F "," '
@@ -125,9 +127,10 @@ deploy-traefik:
     - imovel-ideal-vm1-shell
   variables: 
     WORKDIR_PATH: /var/www/traefik
-  script:
+  before_script:
     - echo "COMPOSE_PROJECT_NAME=imovel-ideal" > $WORKDIR_PATH/.env
     - cp -f traefik-compose.yml $WORKDIR_PATH/docker-compose.yml
+  script:
     - cd $WORKDIR_PATH
     - docker-compose pull
     - docker-compose up --remove-orphans -d
