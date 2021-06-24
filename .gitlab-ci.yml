@@ -1,5 +1,4 @@
-variables:
-  APP_IMAGE: echo $([[ $CI_COMMIT_REF_PROTECTED ]] && printf "app:latest" || printf "app-review:"$CI_COMMIT_REF_NAME)
+# variables:
 #   SPRING_PROFILES_ACTIVE: gitlab-ci
 
 stages:
@@ -46,10 +45,17 @@ app-build:
     - merge_requests
   tags:
     - docker-runner-imovel-ideal
-  variables: 
-    CONTAINER_NAME: $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/$APP_IMAGE
   before_script: 
-    - echo $CONTAINER_NAME
+
+    - |
+      if [ "$CI_COMMIT_REF_NAME" == "master" ]; then
+        echo "setting APP_IMAGE=app:latest"
+        APP_IMAGE="app:latest"
+      else
+        echo "setting APP_IMAGE=app-review:BRANCH_NAME"
+        APP_IMAGE="app-review:"$CI_COMMIT_REF_NAME
+      fi
+    - CONTAINER_NAME=$CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/$APP_IMAGE
     - docker login $CI_REGISTRY -u $DOCKER_USER -p $DOCKER_PASSWORD 
   script:
     - docker build -t $CONTAINER_NAME -f ./docker-config/app/Dockerfile .
