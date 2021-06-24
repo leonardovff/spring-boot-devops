@@ -100,11 +100,15 @@ review:
 stop_review:
   stage: review
   when: manual
-  variables: 
-    WORKDIR_PATH: /var/www/review/$CI_ENVIRONMENT_SLUG
   environment:
     name: review/$CI_COMMIT_REF_NAME
     action: stop
+  only: 
+    - merge_requests
+  tags:
+    - imovel-ideal-vm1-shell
+  variables: 
+    WORKDIR_PATH: /var/www/review/$CI_ENVIRONMENT_SLUG
   script: 
     - cd $WORKDIR_PATH
     - docker-compose down
