@@ -24,8 +24,8 @@ docker-compose up -d app1 app2 app3
 ```bash
 docker-compose up -d proxy
 ```
-#### 5. Open the get url http://localhost:8080/demo/all on browser
-#### 6. Or send a post to url http://localhost:8080/demo/add on client http
+#### 5. Open the get url http://localhost:8080/users on browser
+#### 6. Or send a post to url http://localhost:8080/users on client http
 
 ## without docker-compose 
 
@@ -56,8 +56,8 @@ docker build -t devops/app -f ./docker-config/app/Dockerfile .
 docker run --rm -d -h app -p 9000:8080 --env-file ./.env --network=devops-network devops/app 
 ```
 
-#### 5. Open the get url http://localhost:8080/demo/all on browser
-#### 6. Or send a post to url http://localhost:8080/demo/add on client http
+#### 5. Open the get url http://localhost:8080/users on browser
+#### 6. Or send a post to url http://localhost:8080/users on client http
 
 ## to local development
 
