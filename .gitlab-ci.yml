@@ -78,6 +78,7 @@ review:
   before_script:
     - docker login $CI_REGISTRY -u $DOCKER_USER -p $DOCKER_PASSWORD 
     - APP_IMAGE="app-review:${CI_COMMIT_REF_NAME/\//"-"}"
+    - rm -f -- $WORKDIR_PATH/.env
   script:
     - echo $APP_HOSTNAME
     - mkdir -p $WORKDIR_PATH
