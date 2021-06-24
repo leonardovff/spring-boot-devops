@@ -76,12 +76,13 @@ review:
   tags:
     - imovel-ideal-vm1-shell
   variables: 
-    APP_SLUG: ${CI_COMMIT_REF_NAME/\//"-"}
-    WORKDIR_PATH: /var/www/review/$APP_SLUG
-    APP_HOSTNAME: $APP_SLUG.review.imovelideal.lvff.me
-  script: 
+    WORKDIR_PATH: /var/www/review
+    APP_HOSTNAME: review.imovelideal.lvff.me
+  script:
+    - WORKDIR_PATH=WORKDIR_PATH/$APP_SLUG
+    - APP_HOSTNAME=$APP_SLUG.$APP_HOSTNAME
     - echo $WORKDIR_PATH
-    - echo $APP_SLUG
+    - echo $APP_HOSTNAME
     - mkdir -p $WORKDIR_PATH
     - cp -f $env $WORKDIR_PATH/.env
     - printf  "\nAPP_IMAGE=$APP_IMAGE" >> .env
