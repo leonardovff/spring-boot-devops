@@ -17,7 +17,7 @@ default:
       else
         echo "setting APP_IMAGE=app-review:BRANCH_NAME"
         APP_SLUG="${CI_COMMIT_REF_NAME/\//"-"}"
-        APP_IMAGE="app-review:"$APP_SLUG
+        APP_IMAGE="app-review:"$CI_ENVIRONMENT_SLUG
       fi
     - CONTAINER_NAME=$CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/$APP_IMAGE
     - docker login $CI_REGISTRY -u $DOCKER_USER -p $DOCKER_PASSWORD 
@@ -69,17 +69,15 @@ review:
   stage: review
   environment: 
     name: review/$CI_COMMIT_REF_NAME
-    url: http://$APP_SLUG.review.imovelideal.lvff.me
+    url: http://$CI_ENVIRONMENT_SLUG.review.imovelideal.lvff.me
   only: 
     - merge_requests
   tags:
     - imovel-ideal-vm1-shell
   variables: 
-    WORKDIR_PATH: /var/www/review
-    APP_HOSTNAME: review.imovelideal.lvff.me
+    WORKDIR_PATH: /var/www/review-$CI_ENVIRONMENT_SLUG
+    APP_HOSTNAME: $CI_ENVIRONMENT_SLUG.review.imovelideal.lvff.me
   script:
-    - WORKDIR_PATH=$WORKDIR_PATH/review-$APP_SLUG
-    - APP_HOSTNAME=$APP_SLUG.$APP_HOSTNAME
     - echo $WORKDIR_PATH
     - echo $APP_HOSTNAME
     - mkdir -p $WORKDIR_PATH
