@@ -2,8 +2,8 @@
 #   SPRING_PROFILES_ACTIVE: gitlab-ci
 
 stages:
-  - build
   - review
+  - build
   - test
   - production
   - production-proxy
