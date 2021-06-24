@@ -7,6 +7,19 @@ stages:
   - test
   - production
   - production-proxy
+default:
+  before_script: 
+    - |
+      if [ "$CI_COMMIT_REF_NAME" == "master" ]; then
+        echo "setting APP_IMAGE=app:latest"
+        APP_IMAGE="app:latest"
+      else
+        echo "setting APP_IMAGE=app-review:BRANCH_NAME"
+        APP_IMAGE="app-review:"$CI_COMMIT_REF_NAME
+      fi
+      APP_IMAGE="${APP_IMAGE/\//"-"}"
+    - CONTAINER_NAME=$CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/$APP_IMAGE
+    - docker login $CI_REGISTRY -u $DOCKER_USER -p $DOCKER_PASSWORD 
 
 test: 
   image: maven:3.6.0-jdk-11-slim
@@ -45,18 +58,6 @@ app-build:
     - merge_requests
   tags:
     - docker-runner-imovel-ideal
-  before_script: 
-    - |
-      if [ "$CI_COMMIT_REF_NAME" == "master" ]; then
-        echo "setting APP_IMAGE=app:latest"
-        APP_IMAGE="app:latest"
-      else
-        echo "setting APP_IMAGE=app-review:BRANCH_NAME"
-        APP_IMAGE="app-review:"$CI_COMMIT_REF_NAME
-      fi
-      APP_IMAGE="${APP_IMAGE/\//"-"}"
-    - CONTAINER_NAME=$CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/$APP_IMAGE
-    - docker login $CI_REGISTRY -u $DOCKER_USER -p $DOCKER_PASSWORD 
   script:
     - docker build -t $CONTAINER_NAME -f ./docker-config/app/Dockerfile .
     - docker push $CONTAINER_NAME
@@ -72,11 +73,10 @@ review:
     - imovel-ideal-vm1-shell
   variables: 
     WORKDIR_PATH: /var/www/review/$CI_COMMIT_REF_NAME
-  before_script:
-    - docker login $CI_REGISTRY -u $DOCKER_USER -p $DOCKER_PASSWORD
   script: 
     - mkdir -p $WORKDIR_PATH
     - cp -f $env $WORKDIR_PATH/.env
+    - printf  "\nAPP_IMAGE=$APP_IMAGE" >> .env
     - cp -f docker-compose.production.yml $WORKDIR_PATH/docker-compose.yml
     - cp -f $dbpassword $WORKDIR_PATH/.dbpassword
     - cd $WORKDIR_PATH

@@ -49,8 +49,6 @@ services:
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/dbpassword
     secrets:
       - dbpassword
-    ports:
-      - "${MYSQL_EXTERNAL_PORT}:${MYSQL_INTERNAL_PORT}"
     networks:
       - imovel-ideal-db
     volumes:
