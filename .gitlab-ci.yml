@@ -79,6 +79,8 @@ review:
     WORKDIR_PATH: /var/www/review/$APP_SLUG
     APP_HOSTNAME: $APP_SLUG.review.imovelideal.lvff.me
   script: 
+    - echo $WORKDIR_PATH
+    - echo $APP_SLUG
     - mkdir -p $WORKDIR_PATH
     - cp -f $env $WORKDIR_PATH/.env
     - printf  "\nAPP_IMAGE=$APP_IMAGE" >> .env
