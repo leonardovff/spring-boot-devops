@@ -7,20 +7,6 @@ stages:
   - build
   - production
   - production-proxy
-default:
-  before_script: 
-    - |
-      if [ "$CI_COMMIT_REF_NAME" == "master" ]; then
-        echo "setting APP_IMAGE=app:latest"
-        APP_SLUG="production"
-        APP_IMAGE="app:latest"
-      else
-        echo "setting APP_IMAGE=app-review:BRANCH_NAME"
-        APP_SLUG="${CI_COMMIT_REF_NAME/\//"-"}"
-        APP_IMAGE="app-review:"$CI_ENVIRONMENT_SLUG
-      fi
-    - CONTAINER_NAME=$CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/$APP_IMAGE
-    - docker login $CI_REGISTRY -u $DOCKER_USER -p $DOCKER_PASSWORD 
 
 test: 
   image: maven:3.6.0-jdk-11-slim
@@ -30,8 +16,6 @@ test:
     - main
   tags:
     - docker-runner-imovel-ideal
-  before_script:
-    - echo "init test"
   script:
     - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent test jacoco:report
     - awk -F "," '
@@ -61,7 +45,19 @@ app-build:
     - merge_requests
   tags:
     - docker-runner-imovel-ideal
+  before_script: 
+    - |
+      if [ "$CI_COMMIT_REF_NAME" == "master" ]; then
+        echo "setting APP_IMAGE=app:latest"
+        APP_IMAGE="app:latest"
+      else
+        echo "setting APP_IMAGE=app-review:BRANCH_NAME"
+        APP_IMAGE="app-review:"$CI_ENVIRONMENT_SLUG
+      fi
+    - CONTAINER_NAME=$CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/$APP_IMAGE
+    - docker login $CI_REGISTRY -u $DOCKER_USER -p $DOCKER_PASSWORD 
   script:
+    - echo $APP_IMAGE
     - echo $CONTAINER_NAME
     - docker build -t $CONTAINER_NAME -f ./docker-config/app/Dockerfile .
     - docker push $CONTAINER_NAME
@@ -78,10 +74,10 @@ review:
   variables: 
     WORKDIR_PATH: /var/www/$CI_ENVIRONMENT_SLUG
     APP_HOSTNAME: $CI_ENVIRONMENT_SLUG.review.imovelideal.lvff.me
+    APP_IMAGE: app-review:$CI_ENVIRONMENT_SLUG
+  before_script:
+    - docker login $CI_REGISTRY -u $DOCKER_USER -p $DOCKER_PASSWORD 
   script:
-    - echo $APP_IMAGE
-    - echo $WORKDIR_PATH
-    - echo $APP_HOSTNAME
     - mkdir -p $WORKDIR_PATH
     - cp -f $env $WORKDIR_PATH/.env
     - printf  "\nAPP_IMAGE=$APP_IMAGE" >> .env
@@ -130,10 +126,9 @@ deploy-traefik:
     - imovel-ideal-vm1-shell
   variables: 
     WORKDIR_PATH: /var/www/traefik
-  before_script:
+  script:
     - echo "COMPOSE_PROJECT_NAME=imovel-ideal" > $WORKDIR_PATH/.env
     - cp -f traefik-compose.yml $WORKDIR_PATH/docker-compose.yml
-  script:
     - cd $WORKDIR_PATH
     - docker-compose pull
     - docker-compose up --remove-orphans -d
