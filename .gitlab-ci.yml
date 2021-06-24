@@ -79,11 +79,11 @@ review:
     - docker login $CI_REGISTRY -u $DOCKER_USER -p $DOCKER_PASSWORD 
     - APP_IMAGE="app-review:${CI_COMMIT_REF_NAME/\//"-"}"
   script:
-    - echo APP_HOSTNAME
+    - echo $APP_HOSTNAME
     - mkdir -p $WORKDIR_PATH
     - cp -f $env $WORKDIR_PATH/.env
-    - printf "\nAPP_HOSTNAME=$APP_HOSTNAME" >> .env
-    - printf "\nAPP_IMAGE=$APP_IMAGE" >> .env
+    - printf "\nAPP_HOSTNAME=$APP_HOSTNAME" >> $WORKDIR_PATH/.env
+    - printf "\nAPP_IMAGE=$APP_IMAGE" >> $WORKDIR_PATH/.env
     - cp -f docker-compose.production.yml $WORKDIR_PATH/docker-compose.yml
     - cp -f $dbpassword $WORKDIR_PATH/.dbpassword
     - cd $WORKDIR_PATH
