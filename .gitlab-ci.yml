@@ -76,7 +76,7 @@ review:
   tags:
     - imovel-ideal-vm1-shell
   variables: 
-    WORKDIR_PATH: /var/www/review-$CI_ENVIRONMENT_SLUG
+    WORKDIR_PATH: /var/www/$CI_ENVIRONMENT_SLUG
     APP_HOSTNAME: $CI_ENVIRONMENT_SLUG.review.imovelideal.lvff.me
   script:
     - echo $APP_IMAGE
