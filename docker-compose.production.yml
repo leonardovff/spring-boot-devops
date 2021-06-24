@@ -17,7 +17,7 @@ secrets:
 
 services:
   app: 
-    image: registry.gitlab.com/leonardovff/sprint-boot-devops/app:latest
+    image: registry.gitlab.com/leonardovff/sprint-boot-devops/${APP_IMAGE}
     restart: always
     deploy:
       replicas: 1
@@ -55,3 +55,4 @@ services:
       - imovel-ideal-db
     volumes:
       - imovel-ideal:/var/lib/mysql
+      

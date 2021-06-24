@@ -1,13 +1,13 @@
-# variables:
-#   DOCKER_DRIVER: overlay
+variables:
+  APP_IMAGE: $([[$CI_COMMIT_REF_PROTECTED]] && printf "app:latest" || printf "app-review:"$CI_COMMIT_REF_NAME)
 #   SPRING_PROFILES_ACTIVE: gitlab-ci
 
 stages:
   - test
   - build
+  - review
   - production
   - production-proxy
-  # - review
 
 test: 
   image: maven:3.6.0-jdk-11-slim
@@ -27,6 +27,7 @@ test:
             print covered, "/", instructions, "instructions covered";
             printf "%.f%% covered\n", covered / instructions * 100
           }' target/site/jacoco/jacoco.csv
+    - echo 'end'
   artifacts: 
     paths: 
         - target/site/jacoco/
@@ -46,12 +47,39 @@ app-build:
   tags:
     - docker-runner-imovel-ideal
   variables: 
-    CONTAINER_NAME: $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/app
+    CONTAINER_NAME: $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/$APP_IMAGE
   before_script: 
+    - echo $CONTAINER_NAME
     - docker login $CI_REGISTRY -u $DOCKER_USER -p $DOCKER_PASSWORD 
   script:
     - docker build -t $CONTAINER_NAME -f ./docker-config/app/Dockerfile .
     - docker push $CONTAINER_NAME
+
+review:
+  stage: review
+  environment: 
+    name: review/$CI_COMMIT_REF_NAME
+    url: http://$CI_COMMIT_REF_NAME.review.imovelideal.lvff.me
+  only: 
+    - merge-requests
+  tags:
+    - imovel-ideal-vm1-shell
+  variables: 
+    WORKDIR_PATH: /var/www/review/$CI_COMMIT_REF_NAME
+  before_script:
+    - docker login $CI_REGISTRY -u $DOCKER_USER -p $DOCKER_PASSWORD
+  script: 
+    - mkdir -p $WORKDIR_PATH
+    - cp -f $env $WORKDIR_PATH/.env
+    - cp -f docker-compose.production.yml $WORKDIR_PATH/docker-compose.yml
+    - cp -f $dbpassword $WORKDIR_PATH/.dbpassword
+    - cd $WORKDIR_PATH
+    - docker-compose pull
+    - docker-compose --compatibility up --remove-orphans -d
+    - docker image prune -f
+  after_script:
+    - docker logout
+    - rm -f -- /var/www/.dbpassword
 
 deploy:
   stage: production
