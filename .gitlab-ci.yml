@@ -78,6 +78,7 @@ review:
     WORKDIR_PATH: /var/www/review-$CI_ENVIRONMENT_SLUG
     APP_HOSTNAME: $CI_ENVIRONMENT_SLUG.review.imovelideal.lvff.me
   script:
+    - $APP_IMAGE
     - echo $WORKDIR_PATH
     - echo $APP_HOSTNAME
     - mkdir -p $WORKDIR_PATH
