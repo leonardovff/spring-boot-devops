@@ -3,8 +3,8 @@
 
 stages:
   - build
-  - test
   - review
+  - test
   - production
   - production-proxy
 
