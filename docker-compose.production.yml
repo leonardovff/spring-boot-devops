@@ -17,12 +17,12 @@ secrets:
 
 services:
   app: 
-    image: registry.gitlab.com/leonardovff/sprint-boot-devops/app:latest
+    image: registry.gitlab.com/leonardovff/sprint-boot-devops/${APP_IMAGE}
     restart: always
     deploy:
       replicas: 1
     labels:
-      - "traefik.http.routers.app.rule=Host(`imovelideal.lvff.me`)"
+      - "traefik.http.routers.${APP_NAMESPACE}.rule=Host(`${APP_HOSTNAME}`)"
       - "traefik.enable=true"
     environment:
       MYSQL_HOST: db
@@ -49,9 +49,8 @@ services:
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/dbpassword
     secrets:
       - dbpassword
-    ports:
-      - "${MYSQL_EXTERNAL_PORT}:${MYSQL_INTERNAL_PORT}"
     networks:
       - imovel-ideal-db
     volumes:
       - imovel-ideal:/var/lib/mysql
+      
