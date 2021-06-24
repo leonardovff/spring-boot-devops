@@ -52,7 +52,7 @@ app-build:
         APP_IMAGE="app:latest"
       else
         echo "setting APP_IMAGE=app-review:BRANCH_NAME"
-        APP_IMAGE="app-review:"$CI_ENVIRONMENT_SLUG
+        APP_IMAGE="app-review:${CI_COMMIT_REF_NAME/\//"-"}"
       fi
     - CONTAINER_NAME=$CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/$APP_IMAGE
     - docker login $CI_REGISTRY -u $DOCKER_USER -p $DOCKER_PASSWORD 
@@ -75,9 +75,9 @@ review:
   variables: 
     WORKDIR_PATH: /var/www/review/$CI_ENVIRONMENT_SLUG
     APP_HOSTNAME: $CI_ENVIRONMENT_SLUG.review.imovelideal.lvff.me
-    APP_IMAGE: app-review:$CI_ENVIRONMENT_SLUG
   before_script:
     - docker login $CI_REGISTRY -u $DOCKER_USER -p $DOCKER_PASSWORD 
+    - APP_IMAGE="app-review:${CI_COMMIT_REF_NAME/\//"-"}"
   script:
     - mkdir -p $WORKDIR_PATH
     - cp -f $env $WORKDIR_PATH/.env
