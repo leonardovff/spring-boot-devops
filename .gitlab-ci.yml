@@ -68,7 +68,7 @@ review:
   environment: 
     name: review/$CI_COMMIT_REF_NAME
     url: http://$CI_ENVIRONMENT_SLUG.review.imovelideal.lvff.me
-    on_stop: stop_review_app
+    on_stop: stop_review
   only: 
     - merge_requests
   tags:
