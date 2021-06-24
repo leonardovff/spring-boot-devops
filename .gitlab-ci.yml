@@ -68,6 +68,7 @@ review:
   environment: 
     name: review/$CI_COMMIT_REF_NAME
     url: http://$CI_ENVIRONMENT_SLUG.review.imovelideal.lvff.me
+    on_stop: stop_review_app
   only: 
     - merge_requests
   tags:
@@ -91,10 +92,26 @@ review:
     - cd $WORKDIR_PATH
     - docker-compose pull
     - docker-compose --compatibility up --remove-orphans -d
-    - docker image prune -f
   after_script:
+    - docker image prune -f
     - docker logout
     - rm -f -- $WORKDIR_PATH/.dbpassword
+
+stop_review:
+  stage: review
+  when: manual
+  variables: 
+    WORKDIR_PATH: /var/www/review/$CI_ENVIRONMENT_SLUG
+  environment:
+    name: review/$CI_COMMIT_REF_NAME
+    action: stop
+  script: 
+    - cd $WORKDIR_PATH
+    - docker-compose down
+    - cd ..
+    - rm -rf -- $WORKDIR_PATH
+  after_script:
+    - docker image prune -f
 
 deploy:
   stage: production
