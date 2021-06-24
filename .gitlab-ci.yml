@@ -2,9 +2,9 @@
 #   SPRING_PROFILES_ACTIVE: gitlab-ci
 
 stages:
+  - review
   - test
   - build
-  - review
   - production
   - production-proxy
 
@@ -59,6 +59,7 @@ app-build:
   script:
     - echo $APP_IMAGE
     - echo $CONTAINER_NAME
+    - echo $CI_ENVIRONMENT_SLUG
     - docker build -t $CONTAINER_NAME -f ./docker-config/app/Dockerfile .
     - docker push $CONTAINER_NAME
 
