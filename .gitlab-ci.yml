@@ -1,5 +1,5 @@
 variables:
-  APP_IMAGE: $([[ $CI_COMMIT_REF_PROTECTED ]] && printf "app:latest" || printf "app-review:"$CI_COMMIT_REF_NAME)
+  APP_IMAGE: echo $([[ $CI_COMMIT_REF_PROTECTED ]] && printf "app:latest" || printf "app-review:"$CI_COMMIT_REF_NAME)
 #   SPRING_PROFILES_ACTIVE: gitlab-ci
 
 stages:
