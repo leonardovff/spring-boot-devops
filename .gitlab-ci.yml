@@ -79,7 +79,7 @@ review:
     WORKDIR_PATH: /var/www/review
     APP_HOSTNAME: review.imovelideal.lvff.me
   script:
-    - WORKDIR_PATH=WORKDIR_PATH/$APP_SLUG
+    - WORKDIR_PATH=$WORKDIR_PATH/$APP_SLUG
     - APP_HOSTNAME=$APP_SLUG.$APP_HOSTNAME
     - echo $WORKDIR_PATH
     - echo $APP_HOSTNAME
