@@ -35,6 +35,10 @@
     - name: Instalando gitlab-runner
       shell: dpkg -i gitlab-runner_$(dpkg --print-architecture).deb
       become: True
+  
+    - name: Liberando user do gitlab para uso do docker
+      shell: usermod -aG docker gitlab-runner
+      become: True
 
     - name: Registrando gitlab-runner como docker executor
       shell: sudo gitlab-runner register --non-interactive \
@@ -49,7 +53,3 @@
           --access-level="not_protected"
       environment:
         registration_token: "{{ registration_token }}"
-
-    - name: Liberando user do gitlab para uso do docker
-      shell: usermod -aG docker gitlab-runner
-      become: True
