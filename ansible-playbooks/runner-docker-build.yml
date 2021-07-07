@@ -49,3 +49,7 @@
           --access-level="not_protected"
       environment:
         registration_token: "{{ registration_token }}"
+
+    - name: Liberando user do gitlab para uso do docker
+      shell: usermod -aG docker gitlab-runner
+      become: True
