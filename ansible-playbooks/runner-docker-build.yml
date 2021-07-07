@@ -47,3 +47,5 @@
           --run-untagged="true" \
           --locked="false" \
           --access-level="not_protected"
+      environment:
+        registration_token: "{{ registration_token }}"

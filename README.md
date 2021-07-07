@@ -1,5 +1,18 @@
 [![pipeline status](https://gitlab.com/leonardovff/sprint-boot-devops/badges/main/pipeline.svg)](https://gitlab.com/leonardovff/sprint-boot-devops/-/commits/main)
 [![coverage](https://gitlab.com/leonardovff/sprint-boot-devops/badges/main/coverage.svg)]((https://gitlab.com/leonardovff/sprint-boot-devops/-/commits/main))
+# Ansible
+#### 1. Copy the external_vars.example.yml to ansible-playbooks/vars/external_vars.yml and setting the token in it 
+```bash
+cp external_vars.example.yml ansible-playbooks/vars/external_vars.yml
+```
+#### 2. Install ansible and configure the hosts in /etc/ansible/hosts
+#### With private key 
+
+#### 3. Run ansible playbook
+```bash
+ansible-playbook ansible-playbooks/runner-docker-build.yml
+```
+--------------------------------
 
 # Installation
 ## with docker-compose 
