@@ -1,0 +1,49 @@
+- hosts: infra-docker 
+  vars_files: 
+    - vars/external_vars.yml
+  remote_user: imovelideal
+  tasks:
+    - name: Instalando dependencias
+      apt: 
+        name: ['apt-transport-https','ca-certificates','curl','gnupg','lsb-release']
+        state: present
+      become: true
+
+    - name: Adicionando Docker GPG apt Key
+      apt_key:
+       url: https://download.docker.com/linux/ubuntu/gpg
+       state: present
+      become: true
+    
+    - name: Adicionando Docker repositorio
+      apt_repository:
+       repo: deb https://download.docker.com/linux/ubuntu bionic stable
+       state: present
+      become: true
+
+    - name: Atalizando apt e instalando docker-ce
+      apt: 
+        name: ['docker-ce', 'docker-ce-cli', 'containerd.io'] 
+        state: latest 
+        update_cache: yes
+      become: True
+
+    - name: Baixando gitlab-runner
+      shell: curl -LJO "https://gitlab-runner-downloads.s3.amazonaws.com/latest/deb/gitlab-runner_$(dpkg --print-architecture).deb"
+      become: True
+
+    - name: Instalando gitlab-runner
+      shell: dpkg -i gitlab-runner_$(dpkg --print-architecture).deb
+      become: True
+
+    - name: Registrando gitlab-runner como docker executor
+      shell: sudo gitlab-runner register --non-interactive \
+          --url "https://gitlab.com/" \
+          --registration-token "$registration_token" \
+          --executor "docker" \
+          --docker-image alpine:latest \
+          --description "VM-Docker-Build" \
+          --tag-list "docker-runner-imovel-ideal" \
+          --run-untagged="true" \
+          --locked="false" \
+          --access-level="not_protected"
