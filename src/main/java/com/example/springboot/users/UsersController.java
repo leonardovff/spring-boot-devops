@@ -1,5 +1,4 @@
-package com.example.springboot;
-
+package com.example.springboot.users;
 // import org.springframework.web.bind.annotation.RestController;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping(path="/users") 
 // @RestController
-public class HelloController {
+public class UsersController {
 	@Autowired 
 	private UserRepository userRepository;
 
@@ -22,8 +21,10 @@ public class HelloController {
 	// 	return "Greetings from Spring Boott!";
 	// }
 	@PostMapping(path="") // Map ONLY POST Requests
-	public @ResponseBody String addNewUser (@RequestParam String name
-		, @RequestParam String email) {
+	public @ResponseBody String addNewUser (
+		@RequestParam String name,
+		@RequestParam String email
+	) {
 	  // @ResponseBody means the returned String is the response, not a view name
 	  // @RequestParam means it is a parameter from the GET or POST request
   
